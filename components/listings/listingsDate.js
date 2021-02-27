@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const has = require('has-value')
-var listingsData = require("../listingsData")
 var db = require('../db');
 
 
