@@ -1,0 +1,33 @@
+create table users (
+    id uuid primary key,
+    firstName varchar(255) not null,
+    lastName varchar(255) not null,
+    email varchar(255) unique not null,
+    dateOfBirth date not null,
+    username varchar(255) unique not null,
+    password varchar(255) not null,
+    phoneNumber integer not null
+);
+
+create table listings (
+    idUser uuid,
+    idListing uuid primary key,
+    title varchar(255) not null,
+    category varchar(255) not null,
+    city varchar(255) not null,
+    imgSRC text[4] not null,
+    price integer not null,
+    dateOrigin date not null,
+    acquire varchar(255) not null,
+    description varchar(255) not null
+);
+
+insert into users (id, firstName, lastName, email, dateOfBirth, username, password, phoneNumber) values 
+('4a25c92b-acaa-4c61-a5a3-ff6624ae085a', 'admin', 'admin', 'adming@email.com', '1990-04-05', 'admin', 'admin', 1009220 )
+
+
+insert into listings (idUser, idListing, title, category, city, imgSRC, price, dateOrigin, acquire, description) values (
+    '4a25c92b-acaa-4c61-a5a3-ff6624ae085a', '50aea876-ff09-44dd-97c7-b63ddb4bcbf1', 'a listing', 'shoes', 'oulu', '{assdasd}', 10, '1070-12-12', 'pick-up', 'a pair of shoes'
+);
+
+select idListing, title, category, city, imgSRC, price, dateOrigin, acquire, description, firstName, lastName, email, phoneNumber from listings join users on idUser = id group by idListing, firstName, lastName, email, phonenumber;

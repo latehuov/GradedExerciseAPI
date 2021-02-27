@@ -1,0 +1,90 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/userCreation.json",
+    "type": "object",
+    "title": "userSchema",
+    "description": "Used for validating data on trying to create user",
+    "default": {},
+    "required": [
+        "firstName",
+        "lastName",
+        "email",
+        "dateOfBirth",
+        "username",
+        "password",
+        "phoneNumber"
+    ],
+    "additionalProperties": false,
+    "properties": {
+        "firstName": {
+            "$id": "#/properties/firstName",
+            "type": "string",
+            "title": "firstName",
+            "description": "users first name(s)",
+            "default": "",
+            "examples": [
+                "John"
+            ]
+        },
+        "lastName": {
+            "$id": "#/properties/lastName",
+            "type": "string",
+            "title": "lastName",
+            "description": "users last name",
+            "default": "",
+            "examples": [
+                "smith"
+            ]
+        },
+        "email": {
+            "$id": "#/properties/email",
+            "type": "string",
+            "title": "email",
+            "description": "users email address",
+            "default": "",
+            "examples": [
+                "johnsmith@example.com"
+            ]
+        },
+        "dateOfBirth": {
+            "$id": "#/properties/dateOfBirth",
+            "type": "string",
+            "title": "dateOfBirth",
+            "description": "users date of birth",
+            "default": "1970-01-01",
+            "examples": [
+                "1970-01-01"
+            ]
+        },
+        "username": {
+            "$id": "#/properties/username",
+            "type": "string",
+            "title": "username",
+            "description": "users username",
+            "default": "",
+            "examples": [
+                "johnsmith111"
+            ]
+        },
+        "password": {
+            "$id": "#/properties/password",
+            "type": "string",
+            "title": "password",
+            "description": "users password, 64bit encoded",
+            "default": "",
+            "examples": [
+                "12+osaa2eadfg32"
+            ]
+        },
+        "phoneNumber":{
+            "$id": "#/properties/phoneNumber",
+            "type": "number",
+            "title": "phone number",
+            "description": "users phone number",
+            "default": "",
+            "examples":[
+                "123123123"
+            ]
+        }
+    }
+}

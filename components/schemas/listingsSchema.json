@@ -1,0 +1,103 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/userCreation.json",
+    "type": "object",
+    "title": "userSchema",
+    "description": "Used for validating data on trying to create user",
+    "default": {},
+    "required": [
+        "title",
+        "category",
+        "city",
+        "imgSRC",
+        "price",
+        "dateOrigin",
+        "acquire",
+        "description"
+    ],
+    "additionalProperties": false,
+    "properties": {
+        "title": {
+            "$id": "#/properties/title",
+            "type": "string",
+            "title": "title",
+            "description": "users first name(s)",
+            "default": "",
+            "examples": [
+                "new boots"
+            ]
+        },
+        "category": {
+            "$id": "#/properties/category",
+            "type": "string",
+            "title": "category",
+            "description": "users last name",
+            "default": "",
+            "examples": [
+                "camping"
+            ]
+        },
+        "city": {
+            "$id": "#/properties/city",
+            "type": "string",
+            "title": "city",
+            "description": "users city address",
+            "default": "",
+            "examples": [
+                "oulu"
+            ]
+        },
+        "imgSRC": {
+            "$id": "#/properties/imgSRC",
+            "type": "array",
+            "title": "imgSRC",
+            "description": "users date of birth",
+            "default": [],
+            "minItems": 1,
+            "maxItems": 4,
+            "examples": [
+                ["1970-01-01"]
+            ]
+        },
+        "price": {
+            "$id": "#/properties/price",
+            "type": "number",
+            "title": "price",
+            "description": "users price",
+            "default": "",
+            "examples": [
+                "johnsmith111"
+            ]
+        },
+        "dateOrigin": {
+            "$id": "#/properties/dateOrigin",
+            "type": "string",
+            "title": "date of origin",
+            "description": "when the user wants to start selling the product",
+            "default": "",
+            "examples": [
+                "1090-10-23"
+            ]
+        },
+        "acquire": {
+            "$id": "#/properties/acquire",
+            "type": "string",
+            "title": "acquire",
+            "description": "acquisition method",
+            "default": "",
+            "examples": [
+                "shipping"
+            ]
+        },
+        "description":{
+            "$id": "#/properties/description",
+            "type": "string",
+            "title": "description",
+            "description": "description of product",
+            "default": "",
+            "examples":[
+                "a used boat"
+            ]
+        }
+    }
+}
