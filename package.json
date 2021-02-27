@@ -4,7 +4,8 @@
   "description": "graded exercise api",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ndoe index.js"
   },
   "author": "t8hula00",
   "license": "ISC",
@@ -23,4 +24,5 @@
     "pg": "^8.5.1",
     "uuid": "^8.3.2"
   }
+
 }
