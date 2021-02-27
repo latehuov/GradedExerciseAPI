@@ -1,4 +1,4 @@
-port = 4000
+let port = 4000
 const listingsComponent = require('./components/listings/listingsMain')
 const usersComponent = require('./components/users/usersMain')
 const cors = require('cors')
