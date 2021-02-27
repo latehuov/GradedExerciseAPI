@@ -6,6 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "npm start": "node index.js"
+
+    
   },
   "author": "t8hula00",
   "license": "ISC",
