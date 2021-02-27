@@ -55,12 +55,12 @@ passport.use(new BasicStrategy(
 const jwt = require('jsonwebtoken');
 const JwtStrategy = require('passport-jwt').Strategy,
       ExtractJwt = require('passport-jwt').ExtractJwt;
-const jwtSecretKey = require('../security.json');
+
 
   let options = {}
 
   options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-  options.secretOrKey = jwtSecretKey.secret;
+  options.secretOrKey = process.env.supersecret;
   
   passport.use(new JwtStrategy(options, function(jwt_payload, done) {
     console.log("Processing JWT payload for token content:");
