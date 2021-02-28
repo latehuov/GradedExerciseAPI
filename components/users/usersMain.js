@@ -42,7 +42,7 @@ passport.use(new BasicStrategy(
     console.log(req.user[0].id)
     let idUser = req.user[0].id
     const payload = {user:body}
-    const token = jwt.sign(payload, jwtSecretKey.secret)
+    const token = jwt.sign(payload, process.env.supersecret)
     res.status(200)
     res.json({idUser, token})
   })
