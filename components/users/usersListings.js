@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const has = require('has-value')
 var cloudinary = require('cloudinary');
-var cloudinaryStorage = require('multer-storage-cloudinary');
+var {cloudinaryStorage} = require('multer-storage-cloudinary');
 var multer = require('multer');
 var db = require('../db');
 const { v4: uuidv4 } = require('uuid');
@@ -19,7 +19,7 @@ router.get('/:id', (req, res) =>{
         res.json(results.rows)})
 })
 
-var storage = cloudinaryStorage({
+var storage = new cloudinaryStorage({
     cloudinary: cloudinary,
     folder: 'herokushit',
     allowedFormats: ['jpg', 'png'],
