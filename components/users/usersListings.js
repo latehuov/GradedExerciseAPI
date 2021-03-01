@@ -1,6 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const has = require('has-value')
+var cloudinary = require('cloudinary').v2;
+var cloudinaryStorage = require('multer-storage-cloudinary');
+var multer = require('multer');
 var db = require('../db');
 const { v4: uuidv4 } = require('uuid');
 
@@ -16,11 +19,17 @@ router.get('/:id', (req, res) =>{
         res.json(results.rows)})
 })
 
-
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    folder: "herokushit",
+    allowedFormats: ["jpg", "png"]
+  });
+  var parser = multer({ storage: storage });
+  
 const Ajv = require('ajv').default
 const listingsSchema = require('../schemas/listingsSchema.json');
 
-router.post("/:id", (req, res) =>{
+router.post("/:id", parser.array("imgSRC"), (req, res) =>{
     const ajv = new Ajv()
     const validate = ajv.compile(listingsSchema)
     const allFieldsValid = validate(req.body)
