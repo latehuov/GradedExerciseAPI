@@ -19,7 +19,7 @@ router.get('/:id', (req, res) =>{
         res.json(results.rows)})
 })
 
-var storage = new cloudinaryStorage({
+var storage = cloudinaryStorage({
     cloudinary: cloudinary,
     folder: 'herokushit',
     allowedFormats: ['jpg', 'png'],
