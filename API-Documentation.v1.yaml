@@ -1,0 +1,526 @@
+openapi: 3.0.0
+info:
+  title: API Documentation
+  version: '1.0'
+  contact:
+    name: t8hula00
+  description: Tori api documentation
+servers:
+  - {}
+paths:
+  /users:
+    post:
+      tags: []
+      summary: create a new user
+      operationId: post-users
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: 'Bad Request: missing fields or data in incorrect format'
+        '408':
+          description: Request Timeout
+        '409':
+          description: 'Conflict: username, email or phonenumber already registered'
+      description: Create a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            examples:
+              example-1:
+                value:
+                  firstName: string
+                  lastName: string
+                  email: user@example.com
+                  dateOfBirth: '1997-10-31'
+                  username: string
+                  phoneNumber: 1234567890
+                  password: pa$$word
+  /users/login:
+    post:
+      summary: Log in
+      tags: []
+      operationId: post-users-login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+        '403':
+          description: 'Forbidden: wrong username/password'
+      description: Log in with username and password
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/security'
+            examples:
+              example-1:
+                value:
+                  username: string
+                  password: pa$$word
+        description: username and password
+      security:
+        - login: []
+  /listings:
+    get:
+      summary: Get all listings
+      tags: []
+      operationId: get-listings
+      description: Gets all listings
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/listings'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  '/listings/city/{city}':
+    parameters:
+      - schema:
+          type: string
+          pattern: '^[A-Za-z]+'
+        name: city
+        in: path
+        required: true
+        description: city name to search with
+    get:
+      summary: Get listings by city
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/listings'
+        '400':
+          description: 'Bad Request: city name contains unknown characters'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: get-listings-city
+      description: Gets all listings from city
+      parameters:
+        - schema:
+            type: string
+            pattern: '^[A-Za-z]+'
+          in: query
+          name: city
+          description: city name to search with
+          required: true
+  /listings/date:
+    get:
+      operationId: get-listings-date
+      tags: []
+      parameters:
+        - schema:
+            type: string
+            format: date
+            pattern: '^[0-9-]+'
+          in: query
+          name: startDate
+          required: true
+        - schema:
+            type: string
+            format: date
+            pattern: '^[0-9-]+'
+          in: query
+          name: endDate
+      description: gets all listings posted between startDate and endDate
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/listings'
+        '400':
+          description: 'Bad Request: unknown characters in query string'
+        '409':
+          description: 'Conflict: endDate must be smaller than startDate'
+        '500':
+          description: Internal Server Error
+      summary: get listings by date
+    parameters: []
+  '/users/userpage/browse/{userId}':
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+    get:
+      summary: 'Get listings from user, create new listing'
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/listings'
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+        '401':
+          description: Unauthorized
+      operationId: get-users-userId
+      description: Get all listings from user
+      security:
+        - standard security: []
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          in: query
+          name: userID
+          description: id of user
+    post:
+      summary: ''
+      operationId: post-users-userId
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sellPost'
+        '400':
+          description: 'Bad Request: missing data or incorrect data type in fields'
+        '401':
+          description: Unauthorized
+      description: create a new listing for userId
+      security:
+        - standard security: []
+      parameters: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                imgSRC:
+                  type: array
+                  minItems: 1
+                  maxItems: 4
+                  items:
+                    type: string
+                    format: binary
+              required:
+                - imgSRC
+            examples:
+              example-1:
+                value:
+                  imgSRC:
+                    - string
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sellPost'
+            examples:
+              example-1:
+                value:
+                  id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                  title: string
+                  category: string
+                  city: string
+                  imgSRC:
+                    - string
+                  price: 13.5
+                  dateOrigin: '2019-08-24'
+                  acquire: string
+                  description: string
+                  userInfo:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    firstName: string
+                    lastName: string
+                    email: user@example.com
+                    phone: 1234567890
+  '/users/userpage/edit/{userId}/{listingId}':
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: listingId
+        in: path
+        required: true
+    post:
+      summary: Update or delete listing from user
+      operationId: post-users-userpage-userId-listingId
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+      description: Edit listing from user
+      security:
+        - standard security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/listings'
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                imgSRC:
+                  type: array
+                  minItems: 1
+                  maxItems: 4
+                  items:
+                    type: string
+                    format: binary
+              required:
+                - imgSRC
+        description: ''
+    delete:
+      summary: ''
+      operationId: delete-users-userpage-userId-listingId
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+      description: Delete posting from user
+      security:
+        - standard security: []
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          in: query
+          name: listingId
+          description: listing to delete
+          required: true
+  '/listings/category/{category}':
+    parameters:
+      - schema:
+          type: string
+        name: category
+        in: path
+        required: true
+    get:
+      summary: Get listings by category
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/listings'
+        '400':
+          description: 'Bad Request: wrong query type or missing query'
+        '404':
+          description: 'Not Found: no listing found for category'
+      operationId: get-listings-category-category
+      description: Get listings by category
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: category
+          required: true
+          description: category to search
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      description: ''
+      x-examples:
+        example-1:
+          firstName: string
+          lastName: string
+          email: user@example.com
+          dateOfBirth: '1997-10-31'
+          username: string
+          phoneNumber: 1234567890
+          password: pa$$word
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        dateOfBirth:
+          type: string
+          format: date
+          example: '1997-10-31'
+        username:
+          type: string
+        phoneNumber:
+          type: number
+          example: 1234567890
+        password:
+          type: string
+          format: password
+          minLength: 8
+          pattern: '^[A-Za-z0-9-_]+'
+      required:
+        - firstName
+        - lastName
+        - email
+        - dateOfBirth
+        - username
+        - phoneNumber
+        - password
+    security:
+      title: security
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+      required:
+        - username
+        - password
+    listings:
+      title: listings
+      type: object
+      x-examples:
+        example-1:
+          listings:
+            - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+              title: string
+              category: string
+              city: string
+              imgSRC:
+                - 'http://example.com'
+              price: 13.5
+              dateOrigin: '2019-08-24'
+              acquire: string
+              description: string
+              userInfo:
+                id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                firstName: string
+                lastName: string
+                email: user@example.com
+                phone: 1234567890
+      properties:
+        listings:
+          type: array
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/sellPost'
+    sellPost:
+      title: sellPost
+      type: object
+      x-examples:
+        example-1:
+          id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+          title: string
+          category: string
+          city: string
+          imgSRC:
+            - 'http://example.com'
+          price: 13.5
+          dateOrigin: '2019-08-24'
+          acquire: string
+          description: string
+          userInfo:
+            id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+            firstName: string
+            lastName: string
+            email: user@example.com
+            phone: 1234567890
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        category:
+          type: string
+        city:
+          type: string
+        imgSRC:
+          type: array
+          minItems: 1
+          maxItems: 4
+          items:
+            type: string
+            format: binary
+        price:
+          type: number
+          format: float
+          minimum: 0
+          example: 13.5
+        dateOrigin:
+          type: string
+          format: date
+        acquire:
+          type: string
+        description:
+          type: string
+        userInfo:
+          $ref: '#/components/schemas/userInfo'
+      required:
+        - title
+        - category
+        - city
+        - imgSRC
+        - price
+        - dateOrigin
+        - acquire
+        - description
+        - userInfo
+    userInfo:
+      title: userInfo
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+          pattern: '^[A-Za-z0-9 -_]+'
+        phone:
+          type: number
+          example: 1234567890
+      x-examples:
+        example-1:
+          id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+          firstName: string
+          lastName: string
+          email: user@example.com
+          phone: 1234567890
+  securitySchemes:
+    standard security:
+      type: http
+      scheme: bearer
+      description: ''
+    login:
+      type: http
+      scheme: basic
+  responses: {}
+  parameters: {}

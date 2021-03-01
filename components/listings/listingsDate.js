@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
     startDate = req.query.startDate
     if (req.query.endDate && typeof req.query.endDate == 'string') {
         endDate = req.query.endDate
-        db.query("select idListing, title, category, city, imgSRC, price, dateOrigin, acquire, description, firstName, lastName, email, phoneNumber from listings join users on idUser = id where dateOrigin between $1 and $2 group by idListing, firstName, lastName, email, phonenumber", [startDate, endDate]).then(results => {
+        db.query("select idListing, title, category, city, imgSRC, price, dateOrigin, acquire, description, firstName, lastName, email, phoneNumber from listings join users on idUser = id where dateOrigin between '$1' and '$2' group by idListing, firstName, lastName, email, phonenumber", [startDate, endDate]).then(results => {
             if(results.length < 1)
                 res.sendStatus(404)
             else
