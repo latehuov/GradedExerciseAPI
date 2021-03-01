@@ -30,6 +30,7 @@ const Ajv = require('ajv').default
 const listingsSchema = require('../schemas/listingsSchema.json');
 
 router.post("/:id", parser.array("imgSRC"), (req, res) =>{
+    console.log(req.file)
     const ajv = new Ajv()
     const validate = ajv.compile(listingsSchema)
     const allFieldsValid = validate(req.body)
